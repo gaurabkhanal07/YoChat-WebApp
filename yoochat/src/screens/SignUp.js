@@ -34,6 +34,13 @@ export default function SignUp() {
       return;
     }
 
+    // Client-side password strength validation to match backend requirement
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$/;
+    if (!passwordRegex.test(password)) {
+      alert("Password must be at least 6 characters and include uppercase, lowercase, and a digit");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("username", username);
     formData.append("email", email);
@@ -43,13 +50,17 @@ export default function SignUp() {
     }
 
     try {
-      const response = await axios.post("http://localhost:3000/register", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+  // Let the browser set the Content-Type boundary for multipart/form-data
+  const response = await axios.post("http://localhost:3000/register", formData);
       alert(response.data.message || "Sign Up successful!");
       navigate("/login");
     } catch (error) {
-      alert(error.response?.data?.message || "Something went wrong");
+  // Improved error reporting for debugging: log full error and show server message when available
+  console.error("SignUp Error:", error);
+  const serverMsg = error?.response?.data?.message;
+  const status = error?.response?.status;
+  const errText = serverMsg ? `${serverMsg} (status ${status})` : error.message || "Something went wrong";
+  alert(errText);
     }
   };
 

@@ -122,3 +122,24 @@ export const unfriend = async (user2_id) => {
     return { success: false };
   }
 };
+
+// ----------------- Profile & Feed -----------------
+export const getMyProfile = async () => {
+  try {
+    const res = await fetch(`${API_URL}/users/me`, { headers: getAuthHeaders() });
+    return res.json();
+  } catch (err) {
+    console.error("getMyProfile API Error:", err);
+    return {};
+  }
+};
+
+export const getFriendsPosts = async () => {
+  try {
+    const res = await fetch(`${API_URL}/feed/posts`, { headers: getAuthHeaders() });
+    return res.json();
+  } catch (err) {
+    console.error("getFriendsPosts API Error:", err);
+    return { posts: [] };
+  }
+};

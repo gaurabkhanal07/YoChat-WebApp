@@ -12,11 +12,21 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 
-app.use(cors({
-  origin: "http://localhost:3001",  // frontend URL
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
+// Allow frontend origins for development (configurable via FRONTEND_ORIGIN)
+const defaultOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
+const allowedOrigins = [defaultOrigin, "http://localhost:3001"];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow requests with no origin (like curl, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1) return callback(null, true);
+      return callback(new Error("CORS policy: This origin is not allowed."));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

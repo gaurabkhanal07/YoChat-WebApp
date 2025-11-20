@@ -53,7 +53,7 @@ router.post("/feed/createPost", verifyToken, upload.array("images", 10), control
 router.get("/feed/posts", verifyToken, controller.getFriendsPosts);
 
 // React to a post (like/love)
-router.post("/feed/react", verifyToken, reactToPostController);
+router.post("/feed/react", verifyToken, controller.reactToPost);
 
 
 // Get single post with images and reactions

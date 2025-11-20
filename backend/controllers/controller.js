@@ -580,7 +580,7 @@ const getComments = async (req, res) => {
   }
 };
 
-const reactToPostController = async (req, res) => {
+const reactToPost= async (req, res) => {
   try {
     const user_id = req.user.user_id; // from verifyToken
     const { post_id, reaction_type } = req.body;
@@ -633,5 +633,4 @@ module.exports = {
   reactToPost,
   addComment,
   getComments,
-  reactToPostController
 };
